@@ -1,0 +1,275 @@
+**************************************************************************************************************************************************
+**************************************************************************************************************************************************
+Bob and his string
+**************************************************************************************************************************************************
+import java.util.Scanner;
+
+public class Main {
+
+	static int maxDistance(String s) {
+		int maxDist = -1;
+		int[] lastPos = new int[26];
+		for (int i = 0; i < s.length(); i++) {
+			char c = s.charAt(i);
+			int pos = c - 'a';
+			if (lastPos[pos] > 0) {
+				int dist = i - lastPos[pos];
+				if (dist > maxDist) {
+					maxDist = dist;
+				}
+			} else {
+				lastPos[pos] = i + 1;
+			}
+		}
+		return maxDist;
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		sc.nextLine();
+		for (int i = 0; i < t; i++) {
+			String s = sc.nextLine();
+			int maxDist = maxDistance(s);
+			System.out.println(maxDist);
+		}
+		sc.close();
+	}
+
+}
+
+**************************************************************************************************************************************************
+Strange island
+**************************************************************************************************************************************************
+
+import java.util.Scanner;
+
+public class Main {
+
+	public static String[] map;
+	public static char[][] newmap = new char[12][12];
+	public static int[] u = { 0, 0, 1, -1 };
+	public static int[] v = { 1, -1, 0, 0 };
+
+	public static void main(String[] args) {
+
+		Scanner myObj = new Scanner(System.in);
+		int r = myObj.nextInt();
+		int s = myObj.nextInt();
+		map = new String[r];
+		int mini = 100;
+		int maxi = 0;
+		int minj = 100;
+		int maxj = 0;
+		for (int i = 0; i < r; i++) {
+
+			map[i] = myObj.next();
+		}
+		for (int i = 0; i < r; ++i) {
+
+			for (int j = 0; j < s; ++j) {
+
+				int more = 0;
+				for (int k = 0; k < 4; ++k) {
+
+					int x = i + u[k];
+					int y = j + v[k];
+					if (x < 0 || y < 0 || x >= r || y >= s || map[x].charAt(y) == '.') {
+
+						more++;
+					}
+				}
+				if (more >= 3) {
+
+					newmap[i][j] = '.';
+				} else {
+
+					newmap[i][j] = map[i].charAt(j);
+				}
+				if (newmap[i][j] == 'X') {
+
+					mini = Math.min(mini, i);
+					maxi = Math.max(maxi, i);
+					minj = Math.min(minj, j);
+					maxj = Math.max(maxj, j);
+				}
+			}
+		}
+		for (int i = mini; i <= maxi; ++i) {
+
+			for (int j = minj; j <= maxj; ++j) {
+				
+				System.out.print(newmap[i][j]);
+			}
+			System.out.print("\n");
+		}
+	}
+}
+
+**************************************************************************************************************************************************
+Team Selection
+**************************************************************************************************************************************************
+
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int n = in.nextInt();
+        int[] players = new int[n];
+        for (int i = 0; i < n; i++) {
+            players[i] = in.nextInt();
+        }
+        in.close();
+
+        int[] team = new int[12];
+        generateCombinations(players, team, 0, 0);
+    }
+
+    private static void generateCombinations(int[] players, int[] team, int index, int count) {
+        if (count == 12) {
+            printTeam(team);
+            return;
+        }
+        if (index == players.length) {
+            return;
+        }
+
+        team[count] = players[index];
+        generateCombinations(players, team, index + 1, count + 1);
+        generateCombinations(players, team, index + 1, count);
+
+        team[count] = 0; // remove the last player from the team
+    }
+
+    private static void printTeam(int[] team) {
+        for (int i = 0; i < team.length; i++) {
+            System.out.print(team[i] + " ");
+        }
+        System.out.println();
+    }
+}
+
+
+
+**************************************************************************************************************************************************
+Help Aroma
+**************************************************************************************************************************************************
+
+
+import java.util.Scanner;
+public class Main {
+
+    public static int[][] e = new int[50005][35];
+    public static void main(String[] args) {
+
+        int q;
+        int a;
+        int b;  
+        int c;
+        int d;
+        Scanner myObj = new Scanner(System.in);
+        String s = "";
+        s = myObj.next();
+        q = myObj.nextInt();
+        e[0][s.charAt(0) - 97]++;
+        for (int w = 0 ; w < 26 ; w++) {
+
+            e[0][w] = 0;
+        }
+        for (int i = 1 ; i <= s.length() ; i++) {
+
+            for (int j = 0 ; j < 26 ; j++) {
+
+                e[i][j] = e[i - 1][j];
+            }
+            e[i][s.charAt(i - 1) - 97]++;
+        }
+        for (int v = 0 ; v < q ; v++) {
+
+            a = myObj.nextInt();
+            b = myObj.nextInt();
+            c = myObj.nextInt();
+            d = myObj.nextInt();
+            int p = 1;
+            for (int l = 0 ; l < 26 ; l++) {
+
+                if ((e[b][l] - e[a - 1][l]) != (e[d][l] - e[c - 1][l])) {
+
+                    p = 0;
+                    break;
+                }
+            }
+            if (p == 0) {
+
+                System.out.print("false");
+                System.out.print("\n");
+            }
+            else {
+
+                System.out.print("true");
+                System.out.print("\n");
+            }
+        }
+    }   
+}
+
+
+**************************************************************************************************************************************************
+Maximum invitations
+**************************************************************************************************************************************************
+
+
+import java.util.*;
+
+public class Main {
+
+	static int peri(int w, int h) {
+
+		return w*2+h*2;
+	}
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int m = sc.nextInt();
+		sc.nextLine();
+		char[][] arr = new char[n][m];
+		int[] cnt = new int[m];
+		int max = 0;
+		for (int i = 0; i < n; i++) {
+
+			arr[i] = sc.nextLine().toCharArray();
+			for (int j = 0; j < m; j++) {
+
+				if (arr[i][j] == '.')
+					cnt[j]++;
+				else
+					cnt[j] = 0;
+			}
+			for (int j = 0; j < m; j++) {
+
+				int h = cnt[j];
+				int w = 1;
+				if (h > 0) {
+
+					for (int k = j + 1; k < m; k++) {
+
+						if (cnt[k] < h)
+							break;
+						w++;
+					}
+					for (int k = j - 1; k > 0; k--) {
+
+						if (cnt[k] < h)
+							break;
+						w++;
+					}
+				}
+				max = Math.max(max, peri(w, h));
+			}
+		}
+		System.out.println(max - 1);
+	}
+}
