@@ -1,0 +1,487 @@
+
+*********************************************************************************************************************************************
+BFS
+*********************************************************************************************************************************************
+import java.util.LinkedList;
+import java.util.Queue;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class Solution {
+
+    public static void bfs(int[][] adjMatrix, boolean[] visited, int startVertex) {
+        Queue<Integer> queue = new LinkedList<Integer>();
+        queue.offer(startVertex);
+        visited[startVertex] = true;
+        while (!queue.isEmpty()) {
+            int currVertex = queue.poll();
+            System.out.print(currVertex + " ");
+            for (int i = 0; i < adjMatrix.length; i++) {
+                if (adjMatrix[currVertex][i] == 1 && !visited[i]) {
+                    queue.offer(i);
+                    visited[i] = true;
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws NumberFormatException, IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] str = br.readLine().split(" ");
+        int v = Integer.parseInt(str[0]);
+        int e = Integer.parseInt(str[1]);
+        int[][] adjMatrix = new int[v][v];
+        for (int i = 0; i < e; i++) {
+            String[] str1 = br.readLine().split(" ");
+            int a = Integer.parseInt(str1[0]);
+            int b = Integer.parseInt(str1[1]);
+            adjMatrix[a][b] = 1;
+            adjMatrix[b][a] = 1;
+        }
+        boolean[] visited = new boolean[v];
+        for (int i = 0; i < v; i++) {
+            if (!visited[i]) {
+                bfs(adjMatrix, visited, i);
+            }
+        }
+    }
+}
+
+
+*********************************************************************************************************************************************
+Has Path?
+*********************************************************************************************************************************************
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class Solution {
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+        
+        /* Taking input */
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] line1 = br.readLine().split(" ");
+        int n = Integer.parseInt(line1[0]); // number of vertices
+        int e = Integer.parseInt(line1[1]); // number of edges
+        int[][] adjMatrix = new int[n][n]; // adjacency matrix
+        for (int i = 0; i < e; i++) {
+            String[] edge = br.readLine().split(" ");
+            int u = Integer.parseInt(edge[0]);
+            int v = Integer.parseInt(edge[1]);
+            adjMatrix[u][v] = 1;
+            adjMatrix[v][u] = 1;
+        }
+        String[] line2 = br.readLine().split(" ");
+        int v1 = Integer.parseInt(line2[0]); // vertex 1
+        int v2 = Integer.parseInt(line2[1]); // vertex 2
+        
+        /* BFS algorithm to check if there is a path between v1 and v2 */
+        boolean[] visited = new boolean[n];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(v1);
+        visited[v1] = true;
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            for (int v = 0; v < n; v++) {
+                if (adjMatrix[u][v] == 1 && !visited[v]) {
+                    if (v == v2) {
+                        System.out.println("true");
+                        return;
+                    }
+                    queue.add(v);
+                    visited[v] = true;
+                }
+            }
+        }
+        System.out.println("false");
+	}
+}
+
+
+*********************************************************************************************************************************************
+Get Path - DFS
+*********************************************************************************************************************************************
+
+import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class Solution {
+    
+    private static boolean DFSUtil(int[][] graph, int v1, int v2, boolean[] visited, ArrayList<Integer> path) {
+        visited[v1] = true;
+        path.add(v1);
+        
+        if (v1 == v2) {
+            return true;
+        }
+        
+        for (int i = 0; i < graph.length; i++) {
+            if (graph[v1][i] == 1 && !visited[i]) {
+                if (DFSUtil(graph, i, v2, visited, path)) {
+                    return true;
+                }
+            }
+        }
+        
+        path.remove(path.size() - 1);
+        return false;
+    }
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] line = br.readLine().split(" ");
+        int v = Integer.parseInt(line[0]);
+        int e = Integer.parseInt(line[1]);
+        
+        int[][] graph = new int[v][v];
+        
+        for (int i = 0; i < e; i++) {
+            line = br.readLine().split(" ");
+            int a = Integer.parseInt(line[0]);
+            int b = Integer.parseInt(line[1]);
+            graph[a][b] = 1;
+            graph[b][a] = 1;
+        }
+        
+        line = br.readLine().split(" ");
+        int v1 = Integer.parseInt(line[0]);
+        int v2 = Integer.parseInt(line[1]);
+        
+        boolean[] visited = new boolean[v];
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        
+        if (DFSUtil(graph, v1, v2, visited, path)) {
+            for (int i = path.size() - 1; i >= 0; i--) {
+                System.out.print(path.get(i) + " ");
+            }
+        }
+	}
+}
+
+
+
+*********************************************************************************************************************************************
+Is connected??
+*********************************************************************************************************************************************
+
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Scanner;
+
+
+public class Solution {
+
+    public static void dftraversal(int[][] adjMatrix,int currVertex, boolean[] visited){
+        visited[currVertex] = true;
+        for(int i=0;i<adjMatrix.length;i++){
+            if(adjMatrix[currVertex][i]==1 && !visited[i]){
+                dftraversal(adjMatrix,i,visited);
+            }
+        }
+    }
+
+    public static boolean dftraversal(int[][] adjMatrix){
+        boolean[] visited = new boolean[adjMatrix.length];
+        dftraversal(adjMatrix,0,visited);
+        for (boolean b : visited) if (!b) return false;
+        return true;
+    }
+
+    public static void main(String[] args)  throws NumberFormatException, IOException {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int e = scanner.nextInt();
+        if (n==0) {
+            System.out.println(true);
+            return;
+        }
+        int[][] adjMatrix = new int[n][n];
+        for(int i=0;i<e;i++){
+            int v1 = scanner.nextInt();
+            int v2 = scanner.nextInt();
+            adjMatrix[v1][v2] = 1;
+            adjMatrix[v2][v1] = 1;
+        }
+        System.out.println(dftraversal(adjMatrix));
+    }
+	
+
+}
+
+
+
+*********************************************************************************************************************************************
+*********************************************************************************************************************************************
+Assignment
+*********************************************************************************************************************************************
+Islands
+*********************************************************************************************************************************************
+*********************************************************************************************************************************************
+
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class Solution {
+
+	public static void numConnected(int[][] edges, Queue<Integer> queue, boolean[] visited) {
+        if (queue.peek() == null) return;
+        for (int i = 0; i < visited.length; i++) {
+            if (edges[queue.peek()][i] == 1 && !visited[i]) {
+                queue.add(i);
+                visited[i] = true;
+            }
+        }
+        queue.poll();
+        numConnected(edges, queue, visited);
+    }
+
+    public static int numConnected(int[][] edges, int n) {
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[edges.length];
+        int count = 0;
+        for (int i = 0; i < visited.length; i++) {
+            if (!visited[i]) {
+                count++;
+                queue.add(i);
+                visited[i] = true;
+                numConnected(edges, queue, visited);
+            }
+        }
+        return count;
+    }
+}
+
+
+*********************************************************************************************************************************************
+Coding Ninjas
+*********************************************************************************************************************************************
+
+
+public class Solution {
+
+    public static boolean findWord(char[][] grid, int i, int j, String word, int index) {
+        if (index == word.length()) {
+            // Found the entire word
+            return true;
+        }
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length) {
+            // Out of bounds
+            return false;
+        }
+        if (grid[i][j] != word.charAt(index)) {
+            // Mismatched character
+            return false;
+        }
+        // Mark this cell as visited
+        grid[i][j] = '*';
+        // Search for the next character in all 8 neighboring cells
+        boolean found = findWord(grid, i-1, j-1, word, index+1) ||
+                        findWord(grid, i-1, j, word, index+1) ||
+                        findWord(grid, i-1, j+1, word, index+1) ||
+                        findWord(grid, i, j-1, word, index+1) ||
+                        findWord(grid, i, j+1, word, index+1) ||
+                        findWord(grid, i+1, j-1, word, index+1) ||
+                        findWord(grid, i+1, j, word, index+1) ||
+                        findWord(grid, i+1, j+1, word, index+1);
+        // Unmark this cell so it can be used in other paths
+        grid[i][j] = word.charAt(index);
+        return found;
+    }
+	
+    public static int solve(String[] Graph , int N, int M) {
+        // Convert the string input into a 2D character array
+        char[][] grid = new char[N][M];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                grid[i][j] = Graph[i].charAt(j);
+            }
+        }
+        // Search for the word in the grid
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (grid[i][j] == 'C' && findWord(grid, i, j, "CODINGNINJA", 0)) {
+                    return 1;
+                }
+            }
+        }
+        // Word not found
+        return 0;
+    }
+}
+
+*********************************************************************************************************************************************
+Connecting Dots
+*********************************************************************************************************************************************
+
+import java.util.*;
+
+public class Solution {
+    int[][] a = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
+    boolean validPoint(int x, int y, int n, int m) {
+        return x >= 0 && y >= 0 && x < n && y < m;
+    }
+
+    boolean solve(String[] board, int x, int y, char ch, boolean[][] visited, int i, int j, int count) {
+        if (count > 2 && x == i && y == j) return true;
+        for (int k = 0; k < 4; k++) {
+            x += a[k][0];
+            y += a[k][1];
+
+            if (validPoint(x, y, board.length, board[0].length()) && board[x].charAt(y) == ch && !visited[x][y]) {
+                visited[x][y] = true;
+                if (solve(board, x, y, ch, visited, i, j, count + 1)) return true;
+                visited[x][y] = false;
+            }
+            x -= a[k][0];
+            y -= a[k][1];
+        }
+        return false;
+
+    }
+
+    int solve(String[] board, int n, int m) {
+        boolean[][] visited = new boolean[n][m];
+        for (char i = 'A'; i <= 'Z'; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < m; k++) {
+                    if (i == board[j].charAt(k)) {
+                        if (solve(board, j, k, i, visited, j, k, 0)) return 1;
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+
+}
+
+*********************************************************************************************************************************************
+Largest Piece
+*********************************************************************************************************************************************
+
+
+public class Solution {
+
+    static int[][] dir = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+
+ static boolean validPoint(int x, int y, int n) {
+        return x < n && y < n && x >= 0 && y >= 0;
+    }
+
+    static int solve(String[] board, int x, int y, boolean[][] visited, int count) {
+        for (int k = 0; k < 4; k++) {
+            x += dir[k][0];
+            y += dir[k][1];
+
+            if (validPoint(x, y, board.length) && board[x].charAt(y) == '1' && !visited[x][y]) {
+                visited[x][y] = true;
+                int i = solve(board, x, y, visited, count + 1);
+                if (i>count) count = i;
+            }
+            x -= dir[k][0];
+            y -= dir[k][1];
+        }
+        return count;
+    }
+
+	public static int dfs(String[] edge, int n) {
+		/* Your class should be named Solution
+		 * Don't write main().
+		 * Don't read input, it is passed as function argument.
+		 * Return output and don't print it.
+	 	 * Taking input and printing output is handled automatically.
+        */
+		boolean[][] visited = new boolean[n][n];
+        int count = 0;
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k < n; k++) {
+                if (edge[j].charAt(k) == '1') {
+                    visited[j][k] = true;
+                    int i = solve(edge, j, k, visited, 1);
+                    if (i > count) count = i;
+                }
+            }
+        }
+        return count;
+    }
+}
+
+*********************************************************************************************************************************************
+3 Cycle
+*********************************************************************************************************************************************
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Solution {
+ static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+// coding start
+    public static int solve(boolean[][] graph, int i, int x, int count, boolean[] visited) {
+        int cycle = 0;
+        if (count == 2) {
+            if (graph[i][x]) return 1;
+            else return 0;
+        }
+        for (int k = 0; k < graph.length; k++) {
+            if (graph[i][k] && !visited[k]) {
+                visited[k] = true;
+                cycle += solve(graph, k, x, count + 1, visited);
+                visited[k] = false;
+            }
+        }
+        return cycle;
+    }
+//coding end
+    public static int solve(boolean[][] graph, int n) {
+        int cycle = 0;
+        for (int i = 0; i < n; i++) {
+            cycle += solve(graph, i, i, 0, new boolean[n]);
+        }
+        return cycle / 6;
+    }
+
+
+	public static boolean[][] takeInput() throws IOException {
+		String[] strNums;
+		strNums = br.readLine().split("\\s");
+		int n = Integer.parseInt(strNums[0]);
+		int m = Integer.parseInt(strNums[1]);
+
+		boolean[][] graphs = new boolean[n][n];
+		int firstvertex, secondvertex;
+
+		for (int i = 0; i < m; i++) {
+			String[] strNums1;
+			strNums1 = br.readLine().split("\\s");
+			firstvertex = Integer.parseInt(strNums1[0]);
+			secondvertex = Integer.parseInt(strNums1[1]);
+			graphs[firstvertex][secondvertex] = true;
+			graphs[secondvertex][firstvertex] = true;
+		}
+		return graphs;
+	}
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		boolean[][] graphs = takeInput();
+
+		int ans = solve(graphs, graphs.length);
+		System.out.println(ans);
+
+	}
+}
+
