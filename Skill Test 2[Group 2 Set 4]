@@ -1,0 +1,332 @@
+**********************************************************************************************************************************************
+**********************************************************************************************************************************************
+Group 2 Set 4
+**********************************************************************************************************************************************
+**********************************************************************************************************************************************
+**********************************************************************************************************************************************
+Water n Jugs
+**********************************************************************************************************************************************
+import java.util.*;
+
+public class Solution {
+public static int gcd(int a, int b)
+{
+	if(b == 0)
+	{
+		return a;
+	}
+	return gcd( b, a%b);
+}
+
+public static boolean canMeasureWater(int x, int y, int z)
+
+{
+	if (z > x + y )
+	{
+		return false;
+	}
+	// return z% gcd (x , y)== 0;
+	return z % gcd(Math.max(x, y), Math.min(x, y)) == 0;
+}
+
+
+	public static void main(String[] args) {
+		/* Your class should be named Solution.
+ 			* Read input as specified in the question.
+ 			* Print output as specified in the question.
+		*/
+
+		// Write your code here
+		Scanner s=new Scanner(System.in);
+		int t = s.nextInt();
+		while(t-- > 0)
+		{
+			int x=s.nextInt();
+			int y=s.nextInt();
+			int z=s.nextInt();
+			if(canMeasureWater( x ,y, z))
+			{
+				System.out.println("Yes");
+			}
+			else
+			{
+				System.out.println("No");
+			}
+		}
+		s.close();
+
+	}
+
+}
+
+
+**********************************************************************************************************************************************
+Break Numbers
+**********************************************************************************************************************************************
+
+
+// import java.util.*;
+
+// public class solution {
+    
+//     public static void printCombination(int n) {
+//         List<List<Integer>> result = new ArrayList<>();
+//         backtrack(result, new ArrayList<>(), n, 1);
+//         for (List<Integer> combination : result) {
+//             for (int i = 0; i < combination.size(); i++) {
+//                 System.out.print(combination.get(i) + " ");
+//             }
+//             System.out.println();
+//         }
+//     }
+    
+//     private static void backtrack(List<List<Integer>> result, List<Integer> tempList, int remaining, int start) {
+//         if (remaining < 0) {
+//             return;
+//         }
+//         if (remaining == 0) {
+//             List<Integer> combination = new ArrayList<>(tempList);
+//             Collections.sort(combination);
+//             if (!result.contains(combination)) {
+//                 result.add(combination);
+//             }
+//         } else {
+//             for (int i = start; i <= remaining; i++) {
+//                 tempList.add(i);
+//                 backtrack(result, tempList, remaining - i, i);
+//                 tempList.remove(tempList.size() - 1);
+//             }
+//         }
+//     }
+    
+//     public static void main(String[] args) {
+//         Scanner sc = new Scanner(System.in);
+//         int n = sc.nextInt();
+//         printCombination(n);
+//         sc.close();
+//     }
+// }
+
+
+// import java.util.*;
+
+// public class solution {
+    
+//     public static List<List<Integer>> combinationSum(int n) {
+//         List<List<Integer>>[] dp = new List[n + 1];
+//         dp[0] = new ArrayList<>();
+//         dp[0].add(new ArrayList<>());
+//         for (int i = 1; i <= n; i++) {
+//             dp[i] = new ArrayList<>();
+//             for (int j = 1; j <= i; j++) {
+//                 for (List<Integer> list : dp[i - j]) {
+//                     if (list.isEmpty() || list.get(0) >= j) {
+//                         List<Integer> newList = new ArrayList<>(list);
+//                         newList.add(0, j);
+//                         dp[i].add(newList);
+//                     }
+//                 }
+//             }
+//         }
+//         return dp[n];
+//     }
+    
+//     public static void main(String[] args) {
+//         Scanner sc = new Scanner(System.in);
+//         int n = sc.nextInt();
+//         List<List<Integer>> combinations = combinationSum(n);
+//         for (List<Integer> list : combinations) {
+//             for (int i = 0; i < list.size(); i++) {
+//                 System.out.print(list.get(i));
+//                 if (i < list.size() - 1) {
+//                     System.out.print(" ");
+//                 }
+//             }
+//             System.out.println();
+//         }
+//         sc.close();
+//     }
+// }
+// import java.util.ArrayList;
+// import java.util.Scanner;
+
+// public class solution {
+//     public static void printCombinations(int n) {
+//         printCombinationsHelper(n, 1, "");
+//     }
+    
+//     private static void printCombinationsHelper(int n, int prev, String str) {
+//         if (n == 0) {
+//             System.out.println(str.trim());
+//             return;
+//         }
+        
+//         for (int i = prev; i <= n; i++) {
+//             printCombinationsHelper(n - i, i, str + " " + i);
+//         }
+//     }
+    
+//     public static void main(String[] args) {
+//         Scanner sc = new Scanner(System.in);
+//         int n = sc.nextInt();
+//         printCombinations(n);
+//         sc.close();
+//     }
+// }
+
+
+
+import java.util.ArrayList;
+
+public class solution {
+    public static void printCombination(int n) {
+        ArrayList<Integer> combination = new ArrayList<Integer>();
+        printCombinationsHelper(n, combination, 1);
+    }
+
+    private static void printCombinationsHelper(int n, ArrayList<Integer> combination, int start) {
+        if (n == 0) {
+            for (int i = 0; i < combination.size(); i++) {
+                System.out.print(combination.get(i) + " ");
+            }
+            System.out.println();
+            return;
+        }
+        for (int i = start; i <= n; i++) {
+            combination.add(i);
+            printCombinationsHelper(n - i, combination, i);
+            combination.remove(combination.size() - 1);
+        }
+    }
+}
+
+**********************************************************************************************************************************************
+Group SUm
+**********************************************************************************************************************************************
+
+
+public class Solution {
+
+	public static boolean subsetSumToKIdentical(int input[], int n, int k){
+		/* Your class should be named Solution
+		 * Don't write main().
+		 * Don't read input, it is passed as function argument.
+	 	 * Taking input and printing output is handled automatically.
+		 */
+        
+        return isSubsetSum(input, n, k, true);
+	}
+    
+    private static boolean isSubsetSum(int[] input, int n, int k, boolean isAdjacent) {
+        if (k == 0) {
+            return true;
+        }
+        
+        if (n == 0) {
+            return false;
+        }
+        
+        if (isAdjacent && n > 1 && input[n-1] == input[n-2])
+		 {
+            return isSubsetSum(input, n-1, k, true) || isSubsetSum(input, n-1, k-input[n-1], false);
+        } 
+		else
+		 {
+            return isSubsetSum(input, n-1, k, true) || isSubsetSum(input, n-1, k-input[n-1], isAdjacent); // ANd- dot(.)
+        }
+    }
+}
+
+**********************************************************************************************************************************************
+Possible Combinations
+**********************************************************************************************************************************************
+
+
+// import java.util.*;
+// import java.lang.*;
+// import java.io.*;
+
+
+// public class Solution {
+    
+//     public static void main (String[] args) {
+//         Scanner sc = new Scanner(System.in);
+//         int n = sc.nextInt();
+//         int[] arr = new int[n];
+//         for (int i = 0; i < n; i++) {
+//             arr[i] = sc.nextInt();
+//         }
+//         sc.close();
+        
+//         List<List<Integer>> combinations = getCombinations(arr, 0, 12);
+//         for (List<Integer> combination : combinations) {
+//             for (int num : combination) {
+//                 System.out.print(num + " ");
+//             }
+//             System.out.println();
+//         }
+//     }
+    
+//     private static List<List<Integer>> getCombinations(int[] arr, int start, int k) {
+//         List<List<Integer>> result = new ArrayList<>();
+//         if (k == 0) {
+//             result.add(new ArrayList<>());
+//             return result;
+//         }
+//         if (start >= arr.length) {
+//             return result;
+//         }
+//         List<List<Integer>> combinationsWithoutStart = getCombinations(arr, start + 1, k);
+//         List<List<Integer>> combinationsWithStart = getCombinations(arr, start + 1, k - 1);
+//         for (List<Integer> combination : combinationsWithStart) {
+//             combination.add(arr[start]);
+//         }
+//         result.addAll(combinationsWithoutStart);
+//         result.addAll(combinationsWithStart);
+//         return result;
+//     }
+    
+// }
+
+
+
+import java.util.*;
+
+public class Solution {
+    
+    public static void main (String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+        List<List<Integer>> combinations = generateCombinations(arr, 12);
+        for (List<Integer> combination : combinations) {
+            for (int num : combination) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+    }
+    
+    private static List<List<Integer>> generateCombinations(int[] arr, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+        generateCombinationsHelper(arr, k, 0, new ArrayList<>(), result);
+        return result;
+    }
+    
+    private static void generateCombinationsHelper(int[] arr, int k, int start, List<Integer> current, List<List<Integer>> result) {
+        if (k == 0) {
+            result.add(new ArrayList<>(current));
+            return;
+        }
+        for (int i = start; i <= arr.length - k; i++) {
+            current.add(arr[i]);
+            generateCombinationsHelper(arr, k - 1, i + 1, current, result);
+            current.remove(current.size() - 1);
+        }
+    }
+}
+
+
