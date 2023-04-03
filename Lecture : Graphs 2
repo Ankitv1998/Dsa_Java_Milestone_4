@@ -1,0 +1,166 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Code : Kruskal's Algorithm
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+class Edge implements Comparable<Edge> {
+    int v1;
+    int v2;
+    int weight;
+
+    public Edge(int v1, int v2, int weight) {
+        this.v1 = v1;
+        this.v2 = v2;
+        this.weight = weight;
+    }
+
+    @Override
+    public int compareTo(Edge o) {
+        return this.weight - o.weight;
+    }
+}
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int V = sc.nextInt();
+        int E = sc.nextInt();
+        int count = 0;
+        Edge[] edges = new Edge[E];
+        for (int i = 0; i < E; i++) {
+            int v1 = sc.nextInt();
+            int v2 = sc.nextInt();
+            int weight = sc.nextInt();
+            edges[i] = new Edge(v1, v2, weight);
+        }
+        Arrays.sort(edges);
+        int[] parent = new int[V];
+        for (int i = 0; i < V; i++) {
+            parent[i] = i;
+        }
+        int i = 0;
+        while (count != V - 1) {
+            Edge currEdge = edges[i++];
+            int index = parent[currEdge.v1];
+            while (index!=parent[index]){
+                index = parent[index];
+            }
+            int index2 = parent[currEdge.v2];
+            while (index2!=parent[index2]){
+                index2 = parent[index2];
+            }
+            if (index != index2) {
+                System.out.println(Math.min(currEdge.v1,currEdge.v2) + " " + Math.max(currEdge.v2,currEdge.v1) + " " + currEdge.weight);
+                parent[index] = parent[index2];
+                count++;
+            }
+        }
+    }
+}
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Code : Prim's Algorithm
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+
+public class Solution {
+
+    public static void DFS(int[][] adjMatrix, int x, boolean[] visited, int[] weight, int[] parent,int count) {
+        if (count==adjMatrix.length) return;
+        for (int i = 0; i < adjMatrix.length; i++) {
+            if (adjMatrix[x][i] != 0 && adjMatrix[x][i] < weight[i] && !visited[i]) {
+                weight[i] = adjMatrix[x][i];
+                parent[i] = x;
+            }
+        }	
+        visited[x] = true;
+        x= -1;
+        for (int i = 0; i < adjMatrix.length; i++) {
+            if (!visited[i] && (x==-1 ||weight[x] > weight[i])) {
+                x = i;
+            }
+        }
+        DFS(adjMatrix, x, visited, weight, parent,count+1);
+
+    }
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        int V = s.nextInt();
+        int E = s.nextInt();
+        int[][] adjMatrix = new int[V][V];
+        for (int i = 0; i < E; i++) {
+            int v1 = s.nextInt();
+            int v2 = s.nextInt();
+            int weight = s.nextInt();
+            adjMatrix[v1][v2] = weight;
+            adjMatrix[v2][v1] = weight;
+        }
+        boolean[] visited = new boolean[V];
+        int[] weight = new int[V];
+        Arrays.fill(weight, Integer.MAX_VALUE);
+        weight[0] = 0;
+        int[] parent = new int[V];
+        parent[0] = -1;
+        DFS(adjMatrix, 0, visited, weight, parent,0);
+        for (int i = 1; i < V; i++) {
+            System.out.println(Math.min(i, parent[i]) + " " + Math.max(i, parent[i]) + " " + weight[i]);
+        }
+
+    }
+}
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Code : Dijkstra's Algorithm
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        int V = s.nextInt();
+        int E = s.nextInt();
+        int[][] adjMatrix = new int[V][V];
+        for (int i = 0; i < E; i++) {
+            int v1 = s.nextInt();
+            int v2 = s.nextInt();
+            int weight = s.nextInt();
+            adjMatrix[v1][v2] = weight;
+            adjMatrix[v2][v1] = weight;
+        }
+        boolean[] visited = new boolean[V];
+        int[] distance = new int[V];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[0] = 0;
+        for (int i = 0; i < adjMatrix.length; i++) {
+            int minVertex = -1;
+            for (int j = 0; j < adjMatrix.length; j++) {
+                if (!visited[j] && (minVertex == -1 || distance[minVertex] > distance[j])) {
+                    minVertex = j;
+                }
+            }
+            visited[minVertex] = true;
+            for (int j = 0; j < adjMatrix.length; j++) {
+                if (!visited[j] && adjMatrix[minVertex][j] != 0 && distance[j] > distance[minVertex] + adjMatrix[minVertex][j]) {
+                    distance[j] = distance[minVertex] + adjMatrix[minVertex][j];
+                }
+            }
+        }
+        for (int i = 0; i < adjMatrix.length; i++) {
+            System.out.println(i + " " + distance[i]);
+        }
+    }
+}
+
