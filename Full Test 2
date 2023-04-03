@@ -1,0 +1,192 @@
+____________________________________________________________________________________________________________________________________________
+
+Rainbow array
+____________________________________________________________________________________________________________________________________________
+
+
+import java.util.HashMap;
+
+class Solution {
+
+    public static void israinbow(int[] arr) {
+        boolean isRainbow = true;
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
+        for (int i = 0; i <= 7; i++) hashMap.put(i, 0);
+        boolean inc = true;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > 7) {
+                isRainbow = false;
+                break;
+            }
+            if (arr[i] == 7) {
+                inc = false;
+                continue;
+            }
+            if (inc) hashMap.put(arr[i], hashMap.get(arr[i]) + 1);
+            else hashMap.put(arr[i], hashMap.get(arr[i]) - 1);
+        }
+        for (int i = 0; i < 7; i++) {
+            if (hashMap.get(i) != 0) isRainbow = false;
+        }
+        if (isRainbow) System.out.println("yes");
+        else System.out.println("no");
+    }
+}
+
+____________________________________________________________________________________________________________________________________________
+
+Reverse the Linked List
+____________________________________________________________________________________________________________________________________________
+
+public class Solution {
+
+    public static Node reverseList(Node head, Node newHead){
+        if (head==null) return newHead;
+        Node temp = head.next;
+        head.next = newHead;
+        newHead = head;
+        return reverseList(temp,newHead);
+    }
+
+    public static Node reverse(Node head, int k) {
+        if (head==null) return null;
+        Node temp = head;
+        for (int i =0;i<k-1;i++){
+            if (temp == null){
+                return reverseList(head,null);
+            }
+            temp = temp.next;
+        }
+        if (temp == null){
+                return reverseList(head,null);
+            }
+        Node node = null;
+        node = reverse(temp.next,k);
+        temp.next = null;
+        reverseList(head,null);
+        head.next = node;
+        return temp;
+    }
+}
+
+____________________________________________________________________________________________________________________________________________
+
+Sort an array
+____________________________________________________________________________________________________________________________________________
+
+
+import java.util.*;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = sc.nextInt();
+        }
+        sortArrayByFrequency(arr);
+        for (int i = 0; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+
+    public static void sortArrayByFrequency(int[] arr) {
+        Map<Integer, Integer> freqMap = new HashMap<>();
+        for (int i = 0; i < arr.length; i++) {
+            freqMap.put(arr[i], freqMap.getOrDefault(arr[i], 0) + 1);
+        }
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> {
+            int freqCompare = freqMap.get(b) - freqMap.get(a);
+            if (freqCompare != 0) {
+                return freqCompare;
+            } else {
+                return a - b;
+            }
+        });
+        for (int num : freqMap.keySet()) {
+            pq.offer(num);
+        }
+        int i = 0;
+        while (!pq.isEmpty()) {
+            int num = pq.poll();
+            int freq = freqMap.get(num);
+            for (int j = 0; j < freq; j++) {
+                arr[i++] = num;
+            }
+        }
+    }
+}
+
+____________________________________________________________________________________________________________________________________________
+
+Game of death
+____________________________________________________________________________________________________________________________________________
+
+import java.util.ArrayList;
+import java.util.Scanner;
+class Solution {
+
+    public static void main(String[] args)
+    {
+        Scanner s=new Scanner(System.in);
+
+        int n=s.nextInt();
+        int k=s.nextInt();
+        System.out.println(safePos(n,k));
+    }
+
+    static int safePos(int n, int k) {
+        // code here
+        ArrayList<Integer> al = new ArrayList<>();
+
+        for(int i=1;i<=n;i++){
+            al.add(i);
+        }
+        int index = 0;
+        int ans = solve(al, k-1, index);
+
+        return ans;
+    }
+
+    static int solve(ArrayList<Integer> al, int k, int index){
+        if(al.size() ==1){
+            return al.get(0);
+        }
+
+        index = (index + k)%al.size();
+
+        al.remove(index);
+
+        return solve(al, k, index);
+
+    }
+}
+
+____________________________________________________________________________________________________________________________________________
+
+Binomial Expansion
+____________________________________________________________________________________________________________________________________________
+
+import java.util.Scanner;
+
+class Solution {
+
+    static void series(int A, int X, int n) {
+        int term = (int)Math.pow(A, n);
+        System.out.print(term + " ");
+        for (int i = 1; i <= n; i++) {
+            term = term * X * (n - i + 1)
+                    / (i * A);
+            System.out.print(term + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        series(scanner.nextInt(), scanner.nextInt(), scanner.nextInt());
+    }
+}
+
+
+
