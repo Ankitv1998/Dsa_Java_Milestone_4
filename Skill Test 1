@@ -1,0 +1,214 @@
+*******************************************************************************************************************************************
+Group 1 Set 4
+*******************************************************************************************************************************************
+Group 1 Set 4
+*******************************************************************************************************************************************
+Check Armstrong
+*******************************************************************************************************************************************
+
+
+import java.util.Scanner;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int temp = n;
+		int sum = 0;
+		int digits = String.valueOf(n).length();
+		
+		while(temp > 0) {
+			int rem = temp % 10;
+			sum += Math.pow(rem, digits);
+			temp /= 10;
+		}
+		
+		if(sum == n) {
+			System.out.println("true");
+		} else {
+			System.out.println("false");
+		}
+		sc.close();
+	}
+}
+
+
+*******************************************************************************************************************************************
+Special Sum of array
+*******************************************************************************************************************************************
+
+
+import java.util.Scanner;
+
+public class solution {
+	
+	public static int sum(int arr[])
+	{
+		int sum = 0;
+		
+		for(int i=0; i<arr.length; i++) {
+			sum += arr[i];
+		}
+		
+		while(sum > 9) {
+			int temp = sum;
+			sum = 0;
+			while(temp > 0) {
+				sum += temp % 10;
+				temp /= 10;
+			}
+		}
+		
+		return sum;
+	}
+	
+	public static void main(String[] args) {
+		
+		Scanner sc = new Scanner(System.in);
+		int n = sc.nextInt();
+		int[] arr = new int[n];
+		
+		for(int i=0; i<n; i++) {
+			arr[i] = sc.nextInt();
+		}
+		
+		System.out.println(sum(arr));
+		sc.close();
+	}
+}
+
+
+*******************************************************************************************************************************************
+Rectangular numbers
+*******************************************************************************************************************************************
+
+
+import java.util.*;
+public class solution {
+    public static void print(int n) {
+        int[][] arr = new int[2 * n - 1][2 * n - 1];
+
+        int minRow = 0;
+        int maxRow = arr.length - 1;
+        int minCol = 0;
+        int maxCol = arr[0].length - 1;
+        int value = n;
+
+        while (minRow <= maxRow && minCol <= maxCol) {
+            for (int i = minCol; i <= maxCol; i++) {
+                arr[minRow][i] = value;
+            }
+            minRow++;
+
+            for (int i = minRow; i <= maxRow; i++) {
+                arr[i][maxCol] = value;
+            }
+            maxCol--;
+
+            if (minRow <= maxRow) {
+                for (int i = maxCol; i >= minCol; i--) {
+                    arr[maxRow][i] = value;
+                }
+                maxRow--;
+            }
+
+            if (minCol <= maxCol) {
+                for (int i = maxRow; i >= minRow; i--) {
+                    arr[i][minCol] = value;
+                }
+                minCol++;
+            }
+
+            value--;
+        }
+
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                System.out.print(arr[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        int n = 4;
+        print(n);
+    }
+}
+
+
+*******************************************************************************************************************************************
+Total Strings
+*******************************************************************************************************************************************
+
+
+ /*
+	Time complexity: O(N)
+	Space Complexity: O(N)
+	
+	Where N is the length of strings to be found.
+*/
+
+public class Solution
+{
+    public static int countStringsHelper(int[][][] memo, int m, int freqB, int freqC)
+    {
+        if (freqB > 1 || freqC > 2)
+        {
+            // Invalid string.
+            return 0;
+        }
+        
+        if (m == 0)
+        {
+            // Valid string generated.
+            return 1;
+        }
+        
+        if (freqB == 1 && freqC == 2)
+        {
+            // Only one string is possible i.e. string with all remaining characters as a.
+            return 1;
+        }
+
+        // Check if sub-problem is already solved.
+        if (memo[m][freqB][freqC] != -1)
+        {
+            // Return the stored result.
+            return memo[m][freqB][freqC];
+        }
+
+        // One by one choosing 'a', 'b' and 'c' as the next character.
+        int counter = countStringsHelper(memo, m - 1, freqB, freqC);
+        counter = (counter % 1000000007 + countStringsHelper(memo, m - 1, freqB + 1, freqC) % 1000000007) % 1000000007;
+        counter = (counter % 1000000007 + countStringsHelper(memo, m - 1, freqB, freqC + 1) % 1000000007) % 1000000007;
+
+        // Store the result of the current sub-problem.
+        memo[m][freqB][freqC] = counter;
+
+        return counter;
+    }
+
+    public static int countStrings(int n)
+    {
+        int[][][] memo = new int[n + 1][2][3];
+
+        for (int i = 0; i < n + 1; i++)
+        {
+            for (int j = 0; j < 2; j++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    memo[i][j][k] = -1;
+                }
+            }
+        }
+
+        return countStringsHelper(memo, n, 0, 0);
+    } 
+}
+
+
+ 
