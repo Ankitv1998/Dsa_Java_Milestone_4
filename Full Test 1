@@ -1,0 +1,241 @@
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Jumping Numbers
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+public class Solution {
+    
+    public static void bfs(int x, int num)
+    {
+        Queue<Integer> q = new LinkedList<Integer>();
+        q.add(num);
+ 
+        while (!q.isEmpty()) {
+            num = q.peek();
+            q.poll();
+            if (num <= x) {
+                System.out.print(num + " ");
+                int last_digit = num % 10;
+ 
+                if (last_digit == 0) {
+                    q.add((num * 10) + (last_digit + 1));
+                }
+ 
+                else if (last_digit == 9) {
+                    q.add((num * 10) + (last_digit - 1));
+                }
+ 
+                else {
+                    q.add((num * 10) + (last_digit + 1));
+                    q.add((num * 10) + (last_digit - 1));
+                }
+            }
+        }
+    }
+    
+	public static void showJumpingNos(int x) {
+		System.out.print("0 ");
+ 
+        for (int i = 1; i <= 9 && i <= x; i++) {
+            bfs(x, i);
+        }
+	}
+}
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Backspace problem
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+import java.util.*;
+
+public class Solution {
+    public static String backspace(String s) {
+        Stack<Character> stack = new Stack<Character>();
+        for (char c : s.toCharArray()) {
+            if (c == '#') {
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+            } else {
+                stack.push(c);
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        while (!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+        return sb.reverse().toString();
+    }
+}
+/* public class Solution {
+
+    public static String backspace(String s){
+        for (int i=0;i<s.length();i++){
+            if (s.charAt(i)=='#'){
+                s = s.substring(0,i-1)+s.substring(i+1);
+                i-=2;
+            }
+        }
+        return s;
+    }
+}
+*/
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Merge Two BSTs
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+import java.util.*;
+
+public class solution {
+    static void printMergeTrees(BinaryTreeNode<Integer> root1, BinaryTreeNode<Integer> root2) {
+        List<Integer> list1 = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
+        inorderTraversal(root1, list1);
+        inorderTraversal(root2, list2);
+        List<Integer> mergedList = mergeLists(list1, list2);
+        BinaryTreeNode<Integer> root = constructBST(mergedList, 0, mergedList.size() - 1);
+        inorderTraversal(root);
+    }
+    
+    static void inorderTraversal(BinaryTreeNode<Integer> root, List<Integer> list) {
+        if (root == null) {
+            return;
+        }
+        inorderTraversal(root.left, list);
+        list.add(root.data);
+        inorderTraversal(root.right, list);
+    }
+    
+    static List<Integer> mergeLists(List<Integer> list1, List<Integer> list2) {
+        List<Integer> mergedList = new ArrayList<>();
+        int i = 0, j = 0;
+        while (i < list1.size() && j < list2.size()) {
+            if (list1.get(i) < list2.get(j)) {
+                mergedList.add(list1.get(i++));
+            } else {
+                mergedList.add(list2.get(j++));
+            }
+        }
+        while (i < list1.size()) {
+            mergedList.add(list1.get(i++));
+        }
+        while (j < list2.size()) {
+            mergedList.add(list2.get(j++));
+        }
+        return mergedList;
+    }
+    
+    static BinaryTreeNode<Integer> constructBST(List<Integer> list, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = (start + end) / 2;
+        BinaryTreeNode<Integer> root = new BinaryTreeNode<>(list.get(mid));
+        root.left = constructBST(list, start, mid - 1);
+        root.right = constructBST(list, mid + 1, end);
+        return root;
+    }
+    
+    static void inorderTraversal(BinaryTreeNode<Integer> root) {
+        if (root == null) {
+            return;
+        }
+        inorderTraversal(root.left);
+        System.out.print(root.data + " ");
+        inorderTraversal(root.right);
+    }
+}
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Check Subset
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+// import java.util.HashMap;
+
+
+import java.util.HashSet;
+
+public class solution {
+	
+	public static boolean CheckSubset(int[] arr1, int n1, int[] arr2, int n2) {
+		HashSet<Integer> set = new HashSet<Integer>();
+		
+		// Add all elements of arr1 to the set
+		for (int i = 0; i < n1; i++) {
+			set.add(arr1[i]);
+		}
+		
+		// Check if all elements of arr2 are present in the set
+		for (int i = 0; i < n2; i++) {
+			if (!set.contains(arr2[i])) {
+				return false;
+			}
+			// Remove the element from the set if it is present
+			set.remove(arr2[i]);
+		}
+		
+		return true;
+	}
+}
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+Infinite Sequence
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+
+import java.util.*;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+
+        Map<Integer, Integer> lastOccurrence = new HashMap<>();
+        List<Integer> sequence = new ArrayList<>();
+        sequence.add(0);
+
+        for (int i = 1; i < n; i++) {
+            int x = sequence.get(i - 1);
+            int next;
+
+            if (!lastOccurrence.containsKey(x)) {
+                next = 0;
+            } else {
+                int k = lastOccurrence.get(x);
+                next = i - k;
+            }
+
+            sequence.add(next);
+            lastOccurrence.put(x, i - 1);
+        }
+
+        int x = sequence.get(n - 1);
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (sequence.get(i) == x) {
+                count++;
+            }
+        }
+
+        System.out.println(count);
+    }
+}
+
+
